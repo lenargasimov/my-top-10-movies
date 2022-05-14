@@ -37,6 +37,11 @@ class RateMovieForm(FlaskForm):
     submit = SubmitField("Done")
 
 
+class FindMovieForm(FlaskForm):
+    title = StringField("Movie Title", validators=[DataRequired()])
+    submit = SubmitField("Add Movie")
+
+
 @app.route("/")
 def home():
     all_movies = Movie.query.all()
@@ -54,6 +59,46 @@ def rate_movie():
         db.session.commit()
         return redirect(url_for('home'))
     return render_template("edit.html", movie=movie, form=form)
+
+
+@app.route("/delete")
+def delete_movie():
+    movie_id = request.args.get("id")
+    movie = Movie.query.get(movie_id)
+    db.session.delete(movie)
+    db.session.commit()
+    return redirect(url_for("home"))
+
+
+@app.route("/add", methods=["GET", "POST"])
+def add_movie():
+    form = FindMovieForm()
+
+    if form.validate_on_submit():
+        movie_title = form.title.data
+        response = requests.get(MOVIE_DB_SEARCH_URL, params={"api_key": MOVIE_DB_API_KEY, "query": movie_title})
+        data = response.json()["results"]
+        return render_template("select.html", options=data)
+
+    return render_template("add.html", form=form)
+
+
+@app.route("/find")
+def find_movie():
+    movie_api_id = request.args.get("id")
+    if movie_api_id:
+        movie_api_url = f"{MOVIE_DB_INFO_URL}/{movie_api_id}"
+        response = requests.get(movie_api_url, params={"api_key": MOVIE_DB_API_KEY, "language": "en-US"})
+        data = response.json()
+        new_movie = Movie(
+            title=data["title"],
+            year=data["release_date"].split("-")[0],
+            img_url=f"{MOVIE_DB_IMAGE_URL}{data['poster_path']}",
+            description=data["overview"]
+        )
+        db.session.add(new_movie)
+        db.session.commit()
+        return redirect(url_for("home"))
 
 
 if __name__ == '__main__':

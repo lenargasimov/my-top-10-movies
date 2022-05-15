@@ -34,9 +34,6 @@ class Movie(db.Model):
     img_url = db.Column(db.String(250), nullable=False)
 
 
-db.create_all()
-
-
 class FindMovieForm(FlaskForm):
     title = StringField("Movie Title", validators=[DataRequired()])
     submit = SubmitField("Add Movie")

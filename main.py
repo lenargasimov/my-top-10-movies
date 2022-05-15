@@ -16,13 +16,13 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 Bootstrap(app)
 
-##CREATE DB
+# CREATE DB
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-##CREATE TABLE
+# CREATE TABLE
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(250), unique=True, nullable=False)
@@ -32,6 +32,8 @@ class Movie(db.Model):
     ranking = db.Column(db.Integer, nullable=True)
     review = db.Column(db.String(250), nullable=True)
     img_url = db.Column(db.String(250), nullable=False)
+
+
 db.create_all()
 
 

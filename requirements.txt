@@ -1,5 +1,6 @@
 certifi==2021.10.8
 psycopg2-binary==2.9.3
+onbytes
 charset-normalizer==2.0.12
 click==8.1.3
 dominate==2.6.0

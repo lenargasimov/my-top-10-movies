@@ -20,7 +20,7 @@
     <img src="https://img.shields.io/github/stars/lenargasimov/my-top-100-movies.svg" alt="">
 </p>
 
-[//]: # (![screen_shot_top_movie_website]&#40;screen_shot_top_movie_website.png&#41;)
+![screen_shot_top_movie_website](images/screen_shot_top_movie_website.gif)
 As watch more movies, we can always update our list and keep track of which movies to recommend people.
 
 - Python
